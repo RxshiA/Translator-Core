@@ -5,6 +5,7 @@ import Login from './components/SignupFlow/Login';
 import Register from './components/SignupFlow/Register'
 import Home from './components/Home'
 import Profile from './components/SignupFlow/Profile'
+import Game from './components/Gamification/Game'
 
 function App() {
   const isLoggedIn = localStorage.getItem("loggedIn");
@@ -15,6 +16,7 @@ function App() {
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>}/>
         <Route path="/profile" element={<Profile/>}/>
+        <Route path="/game" element={<Game/>}/>
       </Routes>
     </Router>
   );
