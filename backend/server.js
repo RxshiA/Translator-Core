@@ -16,6 +16,9 @@ mongoose.connect(URL,{
     useNewUrlParser: true
 });
 
+app.use("/user", require("./routes/userRoutes"));
+app.use("/game", require("./routes/gameRoutes"));
+
 const connection = mongoose.connection;
 connection.once("open", () => {
     console.log("Mongodb Connection success!");
