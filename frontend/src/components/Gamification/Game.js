@@ -167,9 +167,10 @@ class Game extends Component {
         <div>{feedback}</div>
         <div>Points: {points}</div>
         <button onClick={this.checkTranslation}>Check Translation</button>
-        <button onClick={this.fetchRandomWord  && this.generateLeaderboard}>Generate New Word</button>
+        <button onClick={this.fetchRandomWord}>Generate New Word</button>
         <button onClick={this.endGame}>End Game</button>
         <br />
+        <br /><text onClick={this.generateLeaderboard}>View the Leaderboard here -> </text>
         {leaderboard && (
           <div>
             <h2>Leaderboard</h2>
