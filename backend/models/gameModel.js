@@ -7,7 +7,7 @@ const gameSchema = new mongoose.Schema({
         unique: true
     },
     points:{
-        type: String,
+        type: Number,
         required: true
     },
 })
