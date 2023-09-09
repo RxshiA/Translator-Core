@@ -35,6 +35,23 @@ export default class Register extends Component{
                 return res.json()
             }
         }).then((jsonRes)=>console.log(jsonRes))
+        fetch("http://localhost:4500/game",{
+            method:"POST",
+            crossDomain:true,
+            headers:{
+                "Content-Type":"application/json",
+                Accept:'application/json',
+                "Access-Control-Allow-Origin":"*",
+            },
+            body:JSON.stringify({
+                email:email,
+                points:0
+            })
+        }).then((res)=>{
+            if(res.ok){
+                return res.json()
+            }
+        }).then((jsonRes)=>console.log(jsonRes))
     }
 
     render(){
