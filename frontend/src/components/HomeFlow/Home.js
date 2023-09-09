@@ -1,109 +1,59 @@
 import React, { Component } from 'react';
-
 import '../../Styles/style.css';
-
- 
-
+import Sidebar from '../../views/Sidebar';
+import Navbar from '../../views/NavBar';
 export default class Home extends Component {
 
   componentDidMount() {
 
     const languages = {
-
       'en-GB': 'English',
-
       'si-LK': 'Sinhala',
-
     };
-
- 
-
     const fromText = document.querySelector('.from-text');
-
     const toText = document.querySelector('.to-text');
-
     const exchageIcon = document.querySelector('.exchange');
-
     const selectTag = document.querySelectorAll('select');
-
     const icons = document.querySelectorAll('.row i');
-
     const translateBtn = document.querySelector('button');
 
- 
-
     selectTag.forEach((tag, id) => {
-
       for (let language_code in languages) {
-
         let selected =
-
           id === 0
-
             ? language_code === 'en-GB'
-
               ? 'selected'
-
               : ''
-
             : language_code === 'hi-IN'
-
-            ? 'selected'
-
-            : '';
-
+              ? 'selected'
+              : '';
         let option = `<option ${selected} value="${language_code}">${languages[language_code]}</option>`;
-
         tag.insertAdjacentHTML('beforeend', option);
-
       }
-
     });
-
- 
 
     exchageIcon.addEventListener('click', () => {
-
       let tempText = fromText.value,
-
         tempLang = selectTag[0].value;
-
       fromText.value = toText.value;
-
       toText.value = tempText;
-
       selectTag[0].value = selectTag[1].value;
-
       selectTag[1].value = tempLang;
-
     });
-
- 
 
     fromText.addEventListener('keyup', () => {
-
       if (!fromText.value) {
-
         toText.value = '';
-
       }
-
     });
 
- 
-
     translateBtn.addEventListener('click', () => {
-
       let text = fromText.value.trim(),
-
         translateFrom = selectTag[0].value,
-
         translateTo = selectTag[1].value;
-
       if (!text) return;
 
       toText.setAttribute('placeholder', 'Translating...');
-
       let apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${translateFrom}|${translateTo}`;
 
       fetch(apiUrl)
@@ -130,7 +80,7 @@ export default class Home extends Component {
 
     });
 
- 
+
 
     icons.forEach((icon) => {
 
@@ -193,87 +143,93 @@ export default class Home extends Component {
       //     </button>
 
       // </div>
+      <>
+        <Sidebar />
+        <div className="relative md:ml-64 bg-blueGray-100">
+          <Navbar />
+          <div className="relative bg-pink-600 md:pt-32 pb-5 pt-12">
+          </div>
+          <div className="Home">
 
-      <div className="Home">
+            <div class="container">
 
-        <div class="container">
+              <div class="wrapper">
 
-          <div class="wrapper">
+                <div class="text-input">
 
-            <div class="text-input">
+                  <textarea
 
-              <textarea
+                    spellcheck="false"
 
-                spellcheck="false"
+                    class="from-text"
 
-                class="from-text"
+                    placeholder="Enter text"
 
-                placeholder="Enter text"
+                  ></textarea>
 
-              ></textarea>
+                  <textarea
 
-              <textarea
+                    spellcheck="false"
 
-                spellcheck="false"
+                    readonly
 
-                readonly
+                    disabled
 
-                disabled
+                    class="to-text"
 
-                class="to-text"
+                    placeholder="Translation"
 
-                placeholder="Translation"
+                  ></textarea>
 
-              ></textarea>
+                </div>
+
+                <ul class="controls">
+
+                  <li class="row from">
+
+                    <div className="icons">
+
+                      <i id="from" className="fas fa-volume-up"></i>
+
+                      <i className="fas fa-copy"></i>
+
+                    </div>
+
+                    <select></select>
+
+                  </li>
+
+                  <li class="exchange">
+
+                    <i class="fas fa-exchange-alt"></i>
+
+                  </li>
+
+                  <li class="row to">
+
+                    <select></select>
+
+                    <div className="icons">
+
+                      <i id="to" className="fas fa-volume-up"></i>
+
+                      <i className="fas fa-copy"></i>
+
+                    </div>
+
+                  </li>
+
+                </ul>
+
+              </div>
+
+              <button>Translate Text</button>
 
             </div>
 
-            <ul class="controls">
-
-              <li class="row from">
-
-                <div className="icons">
-
-                  <i id="from" className="fas fa-volume-up"></i>
-
-                  <i className="fas fa-copy"></i>
-
-                </div>
-
-                <select></select>
-
-              </li>
-
-              <li class="exchange">
-
-                <i class="fas fa-exchange-alt"></i>
-
-              </li>
-
-              <li class="row to">
-
-                <select></select>
-
-                <div className="icons">
-
-                  <i id="to" className="fas fa-volume-up"></i>
-
-                  <i className="fas fa-copy"></i>
-
-                </div>
-
-              </li>
-
-            </ul>
-
           </div>
-
-          <button>Translate Text</button>
-
         </div>
-
-      </div>
-
+      </>
     );
 
   }
