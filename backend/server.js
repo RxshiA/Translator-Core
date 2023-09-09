@@ -20,6 +20,7 @@ app.use("/user", require("./routes/userRoutes"));
 app.use("/game", require("./routes/gameRoutes"));
 app.use("/translate", require("./routes/translateRoutes.js"));
 
+
 const connection = mongoose.connection;
 connection.once("open", () => {
     console.log("Mongodb Connection success!");
