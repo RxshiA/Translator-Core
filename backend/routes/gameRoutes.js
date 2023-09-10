@@ -1,7 +1,9 @@
-const express = require("express");
-const router = express.Router();
-const Game = require("../models/gameModel");
-
+const express = require("express")
+const router = express.Router()
+const Game = require("../models/gameModel")
+const pdfTemplate = require('../models/gameReport')
+const pdf = require('html-pdf')
+const path = require('path')
 
 router.post("/", async (req, res) => {
     const { email, points } = req.body;
@@ -63,6 +65,19 @@ router.put("/:email", async (req, res) => {
       console.log(err);
       res.status(500).json({ message: "Internal server error" });
     });
+});
+
+router.post('/createpdf', async (req, res) => {
+    pdf.create(pdfTemplate(req.body), {}).toFile('leaderboard.pdf', (err) => {
+        if (err) {
+            return Promise.reject();
+        }
+        res.send('PDF generated')
+    });
+});
+
+router.get('/fetchpdf', async (req, res) => {
+    res.sendFile(path.join(__dirname, '../leaderboard.pdf'))
 });
 
 module.exports = router;
