@@ -10,6 +10,7 @@ import Home from './components/HomeFlow/Home'
 import Profile from './components/SignupFlow/Profile'
 import Game from './components/Gamification/Game'
 import Translation from './components/SinglishTyping/singlish'
+import Definition from './components/Dictionary/Definition';
 
 
 
@@ -26,6 +27,8 @@ function App() {
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/game" element={<Game/>}/>
         <Route path="sin" element={<Translation />} />
+        <Route path="/definition/:word"  element={<Definition />}/>
+
 
       </Routes>
 

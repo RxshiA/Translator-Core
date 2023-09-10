@@ -12,20 +12,20 @@ app.use(bodyParser.json());
 
 const URL = process.env.MONGODB_URL;
 
-mongoose.connect(URL,{
-    useNewUrlParser: true
+mongoose.connect(URL, {
+  useNewUrlParser: true,
 });
 
 app.use("/user", require("./routes/userRoutes"));
 app.use("/game", require("./routes/gameRoutes"));
 app.use("/translate", require("./routes/translateRoutes.js"));
-
+app.use("/bookmark", require("./routes/bookmarkRoutes.js"));
 
 const connection = mongoose.connection;
 connection.once("open", () => {
-    console.log("Mongodb Connection success!");
-})
+  console.log("Mongodb Connection success!");
+});
 
 app.listen(PORT, () => {
-    console.log(`Server is up and running on port ${PORT}`)
-})
+  console.log(`Server is up and running on port ${PORT}`);
+});

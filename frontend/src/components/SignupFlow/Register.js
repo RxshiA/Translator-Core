@@ -53,6 +53,7 @@ export default class Register extends Component{
                 return res.json()
             }
         }).then((jsonRes)=>console.log(jsonRes))
+        alert("Successfully Registered");
     }
 
     render(){
