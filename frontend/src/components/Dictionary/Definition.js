@@ -1,11 +1,49 @@
 import { useState, useEffect, Fragment } from "react";
 import { useParams } from "react-router-dom";
-import { Stack, Typography, Box, IconButton, Divider, CircularProgress, useTheme, Button, styled } from '@mui/material';
+import {
+  Stack,
+  Typography,
+  Box,
+  IconButton,
+  Divider,
+  CircularProgress,
+  useTheme,
+  Button,
+  styled,
+} from "@mui/material";
+import {
+  BookmarkAdd as Bookmark,
+  BookmarkAdded as BookmarkAdd,
+} from "@mui/icons-material";
 import axios from "axios";
 
 const Definition = () => {
   const { word } = useParams();
   const [definitions, setDefinitions] = useState([]);
+  const [bookmarks, setBookmarks] = useState(false);
+  const [bookmarkList, setBookmarkList] = useState([]);
+
+  const addBookmark = (word, definitions) => {
+    const newBookmark = { word, definitions };
+
+    axios
+      .post("http://localhost:4500/bookmark/add", newBookmark)
+      .then(() => {
+        console.log("bookmark added");
+        setBookmarks(true);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const removeBookmark = (word) => {
+    axios
+      .post(`http://localhost:4500/bookmark/delete/${word}`)
+      .then(() => {
+        console.log("bookmark deleted");
+        setBookmarks(false);
+      })
+      .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
     const fetchDefinition = async () => {
@@ -16,10 +54,49 @@ const Definition = () => {
     };
 
     fetchDefinition();
+
+    function getBookmarkList(word) {
+      axios
+        .get(`http://localhost:4500/bookmark/search/${word}`)
+        .then((res) => {
+          res.data !== null ? setBookmarks(true) : setBookmarks(false);
+
+          console.log(res + "getBookmarkList");
+        })
+        .catch((error) => {
+          console.error("Error fetching bookmark:", error.message);
+        });
+    }
+
+    getBookmarkList(word);
   }, []);
 
   return (
     <>
+    <Box sx={{}}>
+    <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Typography variant="h4">{word}</Typography>
+        <IconButton
+          onClick={() => {
+            if (bookmarks === false) {
+              addBookmark(word, definitions);
+            } else {
+              removeBookmark(word, definitions);
+            }
+          }}
+        >
+          {bookmarks === false ? (
+            <Bookmark sx={{ color: "black" }} />
+          ) : (
+            <Bookmark sx={{ color: "blue" }} />
+          )}
+        </IconButton>
+      </Stack>
+
       {definitions.map((def, idx) => (
         <Fragment key={idx}>
           <Divider sx={{ display: idx === 0 ? "none" : "block", my: 3 }} />
@@ -56,6 +133,8 @@ const Definition = () => {
           ))}
         </Fragment>
       ))}
+    </Box>
+      
     </>
   );
 };
