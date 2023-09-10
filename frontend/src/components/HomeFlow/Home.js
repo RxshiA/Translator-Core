@@ -2,8 +2,22 @@ import React, { Component } from 'react';
 import '../../Styles/style.css';
 import Sidebar from '../../views/Sidebar';
 import Navbar from '../../views/NavBar';
+import { dlManelToUnicode, singlishToUnicode, unicodeToDlManel } from "sinhala-unicode-coverter"
 
 export default class Home extends Component {
+  constructor() {
+    super();
+    this.state = {
+      languages: {
+        'en-GB': 'English',
+        'si-LK': 'Sinhala',
+      },
+      fromText: '',
+      toText: '',
+      selectedLanguageFrom: 'en-GB',
+      selectedLanguageTo: 'si-LK',
+    };
+  }
 
   componentDidMount() {
     const languages = {
@@ -11,19 +25,14 @@ export default class Home extends Component {
       'si-LK': 'Sinhala',
     };
 
-  const fromText = document.querySelector('.from-text');
-  const toText = document.querySelector('.to-text');
-  const exchageIcon = document.querySelector('.exchange');
-  const selectTag = document.querySelectorAll('select');
-  const icons = document.querySelectorAll('.row i');
-  const translateBtn = document.querySelector('button');
+    const selectTag = document.querySelectorAll('select');
 
-  selectTag.forEach((tag, id) => {
-    for (let language_code in languages) {
-      let selected =
-        id === 0
-          ? language_code === 'en-GB'
-            ? 'selected'
+    selectTag.forEach((tag, id) => {
+      for (let language_code in languages) {
+        let selected =
+          id === 0
+            ? language_code === 'en-GB'
+              ? 'selected'
               : ''
             : language_code === 'hi-IN'
             ? 'selected'
@@ -31,120 +40,181 @@ export default class Home extends Component {
         let option = `<option ${selected} value="${language_code}">${languages[language_code]}</option>`;
         tag.insertAdjacentHTML('beforeend', option);
       }
-
-    });
-
-  exchageIcon.addEventListener('click', () => {
-    let tempText = fromText.value,
-      tempLang = selectTag[0].value;
-      fromText.value = toText.value;
-      toText.value = tempText;
-      selectTag[0].value = selectTag[1].value;
-      selectTag[1].value = tempLang;
-    });
-
- 
-
-  fromText.addEventListener('keyup', () => {
-    if (!fromText.value) {
-      toText.value = '';
-    }
-  });
-
-  translateBtn.addEventListener('click', () => {
-    let text = fromText.value.trim(),
-      translateFrom = selectTag[0].value,
-      translateTo = selectTag[1].value;
-      if (!text) return;
-      toText.setAttribute('placeholder', 'Translating...');
-      let apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${translateFrom}|${translateTo}`;
-      fetch(apiUrl)
-        .then((res) => res.json())
-        .then((data) => {
-          toText.value = data.responseData.translatedText;
-          data.matches.forEach((data) => {
-            if (data.id === 0) {
-              toText.value = data.translation;
-            }
-          });
-          toText.setAttribute('placeholder', 'Translation');
-        });
-    });
-
- 
-
-  icons.forEach((icon) => {
-    let utterance = new SpeechSynthesisUtterance();
-      icon.addEventListener('click', ({ target }) => {
-        if (!fromText.value || !toText.value) return;
-        if (target.classList.contains('fa-copy')) {
-          if (target.id === 'from') {
-            navigator.clipboard.writeText(fromText.value);
-          } else {
-            navigator.clipboard.writeText(toText.value);
-          }
-        } else {
-          if (target.id === 'from') {
-            utterance.text = fromText.value;
-            utterance.lang = selectTag[0].value; // Set the language
-          } else {
-            utterance.text = toText.value;
-            utterance.lang = selectTag[1].value; // Set the language
-          }
-        }
-        speechSynthesis.speak(utterance);
-      });
     });
   }
 
+  handleInputChange = (event, inputType) => {
+    const { selectedLanguageFrom, selectedLanguageTo } = this.state;
+    const inputValue = event.target.value.trim();
+
+    this.setState({ [inputType]: inputValue });
+
+    if (!inputValue) {
+      this.setState({ toText: '' });
+      return;
+    }
+
+    if (selectedLanguageFrom === 'si-LK') {
+      // If input language is Sinhala, convert Singlish to Sinhala
+      const sinhalaText = singlishToUnicode(inputValue);
+      this.setState({ toText: sinhalaText });
+      return;
+    }
+
+    // Otherwise, use the original text
+    this.setState({ toText: inputValue });
+  };
+
+  handleExchangeClick = () => {
+    const {
+      fromText,
+      toText,
+      selectedLanguageFrom,
+      selectedLanguageTo,
+    } = this.state;
+
+    const tempText = fromText;
+    const tempLang = selectedLanguageFrom;
+
+    this.setState({
+      fromText: toText,
+      toText: tempText,
+      selectedLanguageFrom: selectedLanguageTo,
+      selectedLanguageTo: tempLang,
+    });
+  };
+
+  handleTranslateClick = () => {
+    const { fromText, selectedLanguageFrom, selectedLanguageTo } = this.state;
+
+    if (!fromText) return;
+
+    const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
+      fromText
+    )}&langpair=${selectedLanguageFrom}|${selectedLanguageTo}`;
+
+    fetch(apiUrl)
+      .then((res) => res.json())
+      .then((data) => {
+        const translatedText =
+          data.responseData.translatedText || data.responseData;
+
+        this.setState({ toText: translatedText });
+      });
+  };
+
   render() {
+    const {
+      languages,
+      fromText,
+      toText,
+      selectedLanguageFrom,
+      selectedLanguageTo,
+    } = this.state;
+
     return (
-      <>
-        <div className="relative md:ml-64 bg-blueGray-100">
-          <Navbar />
-          <div className="relative bg-pink-600 md:pt-32 pb-5 pt-12"></div>
-        </div>
-        <div className="Home">
-          <div className="container ml-20">
-            <div className="wrapper">
-              <div className="text-input">
-                <textarea
-                  spellCheck="false"
-                  className="from-text"
-                  placeholder="Enter text"
-                ></textarea>
-                <textarea
-                  spellCheck="false"
-                  readOnly
-                  disabled
-                  className="to-text"
-                  placeholder="Translation"
-                ></textarea>
-              </div>
-              <ul className="controls">
-                <li className="row from">
-                  <div className="icons">
-                    <i id="from" className="fas fa-volume-up"></i>
-                    <i className="fas fa-copy"></i>
-                  </div>
-                  <select></select>
-                </li>
-                <li className="exchange">
-                  <i className="fas fa-exchange-alt"></i>
-                </li>
-                <li className="row to">
-                  <select></select>
-                  <div className="icons">
-                    <i id="to" className="fas fa-volume-up"></i>
-                    <i className="fas fa-copy"></i>
-                  </div>
-                </li>
-              </ul>
+      <><div className="relative md:ml-64 bg-blueGray-100">
+      <Navbar />
+      <div className="relative bg-pink-600 md:pt-25 pb-5 pt-20"></div>
+    </div>
+      <div className="Home ml-5 mr-0">
+        <div className="container">
+          <div className="wrapper">
+            <div className="text-input">
+              <textarea
+                spellCheck="false"
+                className="from-text"
+                placeholder="Enter text"
+                value={fromText}
+                onChange={(e) => this.handleInputChange(e, 'fromText')}
+              ></textarea>
+              <textarea
+                spellCheck="false"
+                readOnly
+                disabled
+                className="to-text"
+                placeholder="Translation"
+                value={toText}
+              ></textarea>
             </div>
-            <button>Translate Text</button>
+            <ul className="controls">
+              <li className="row from">
+                <div className="icons">
+                  <i id="from" className="fas fa-volume-up"></i>
+                  <i className="fas fa-copy"></i>
+                </div>
+                <select
+                  value={selectedLanguageFrom}
+                  onChange={(e) =>
+                    this.setState({ selectedLanguageFrom: e.target.value })
+                  }
+                >
+                  {Object.keys(languages).map((languageCode) => (
+                    <option key={languageCode} value={languageCode}>
+                      {languages[languageCode]}
+                    </option>
+                  ))}
+                </select>
+              </li>
+              <li className="exchange" onClick={this.handleExchangeClick}>
+                <i className="fas fa-exchange-alt"></i>
+              </li>
+              <li className="row to">
+                <select
+                  value={selectedLanguageTo}
+                  onChange={(e) =>
+                    this.setState({ selectedLanguageTo: e.target.value })
+                  }
+                >
+                  {Object.keys(languages).map((languageCode) => (
+                    <option key={languageCode} value={languageCode}>
+                      {languages[languageCode]}
+                    </option>
+                  ))}
+                </select>
+                <div className="icons">
+                  <i id="to" className="fas fa-volume-up"></i>
+                  <i className="fas fa-copy"></i>
+                </div>
+              </li>
+            </ul>
           </div>
-          <Sidebar />
+          <button onClick={this.handleTranslateClick}>Translate Text</button>
+
+
+          <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white rounded-xl h-full mt-3">
+                    <thead>
+                        <tr>
+                        <th
+                                    scope='col'
+                                    className='px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase'>
+                                    Input Text
+                                    </th>
+
+                                    <th
+                                    scope='col'
+                                    className='px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase'>
+                                    Output Text
+                                    </th>
+
+                                 
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-500">
+                                   Row 1
+                                 </td>
+
+                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-500">
+                                    Row 1
+                                 </td>
+
+
+                    </tbody>
+          </table>
         </div>
+        <Sidebar />
+      </div>
       </>
     );
   }
