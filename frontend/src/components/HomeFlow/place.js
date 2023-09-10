@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import '../../Styles/style.css';
-import Sidebar from '../../views/Sidebar';
-import Navbar from '../../views/NavBar';
 import { dlManelToUnicode, singlishToUnicode, unicodeToDlManel } from "sinhala-unicode-coverter"
 
 export default class Home extends Component {
@@ -113,11 +111,7 @@ export default class Home extends Component {
     } = this.state;
 
     return (
-      <><div className="relative md:ml-64 bg-blueGray-100">
-      <Navbar />
-      <div className="relative bg-pink-600 md:pt-25 pb-5 pt-20"></div>
-    </div>
-      <div className="Home ml-5 mr-0">
+      <div className="Home">
         <div className="container">
           <div className="wrapper">
             <div className="text-input">
@@ -213,9 +207,7 @@ export default class Home extends Component {
                     </tbody>
           </table>
         </div>
-        <Sidebar />
       </div>
-      </>
     );
   }
 }

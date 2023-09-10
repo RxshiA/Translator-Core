@@ -35,8 +35,30 @@ class GameBox extends Component {
             alert("Login Again");
             localStorage.clear();
             window.location.href="./login";
+        }else{
+          this.fetchUserScore(data.data.email);
         }
     })
+  }
+
+  fetchUserScore(email) {
+    fetch("http://localhost:4500/game/" + email, {
+      method: "GET",
+      crossDomain: true,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // Update the user's score in the state
+        this.setState({
+          points: data[0].points,
+        });
+        console.log(data);
+      });
   }
 
   fetchRandomWord = () => {
@@ -53,12 +75,6 @@ class GameBox extends Component {
       },
     })
     .then((res)=>res.json())
-    .then((data) => {
-      this.setState({
-        points: data[0].points,
-      });
-      console.log(data);
-    });
   };
 
   checkTranslation = () => {
