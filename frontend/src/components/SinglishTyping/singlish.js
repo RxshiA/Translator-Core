@@ -1,49 +1,59 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useFormik } from 'formik';
+import { TextField, Container, Typography } from '@mui/material';
+import { dlManelToUnicode, singlishToUnicode, unicodeToDlManel } from "sinhala-unicode-coverter"
 
-function Translation() {
-  const [inputValue, setInputValue] = useState('');
-  const [resultValue, setResultValue] = useState('');
+const Translation = () => {
+  const initialValues = {
+    singlishText: '',
+    sinhalaText: '',
+  };
 
-  useEffect(() => {
-    // This effect will run when the component mounts
-    trans(inputValue);
-  }, [inputValue]);
+  const formik = useFormik({
+    initialValues,
+    onSubmit: (values) => {
+      // The onSubmit function is not needed for live translation.
+    },
+  });
 
-  const trans = async (txtAre) => {
-    const remotePath = "https://easysinhalaunicode.com/Api/convert";
-    try {
-      const response = await fetch(remotePath, {
-        method: "POST",
-        body: JSON.stringify({ data: txtAre }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-
-      const data = await response.json();
-      setResultValue(data);
-    } catch (err) {
-      setResultValue(err.message);
-    }
+  const handleSinglishInputChange = (event) => {
+    const singlishText = event.target.value;
+    const sinhalaText = singlishToUnicode(singlishText);
+    formik.setFieldValue('singlishText', singlishText);
+    formik.setFieldValue('sinhalaText', sinhalaText);
   };
 
   return (
-    <div>
-      <textarea
-        id="sou"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-      ></textarea>
-      <div>
-        <button onClick={() => trans(inputValue)}>Submit</button>
-      </div>
-      <textarea id="res" value={resultValue} readOnly></textarea>
-    </div>
+    <Container maxWidth="sm">
+      <Typography variant="h4" gutterBottom>
+        Singlish to Sinhala Translator
+      </Typography>
+      <form>
+        <TextField
+          fullWidth
+          id="singlishText"
+          name="singlishText"
+          label="Enter Singlish Text"
+          multiline
+          rows={4}
+          variant="outlined"
+          value={formik.values.singlishText}
+          onChange={handleSinglishInputChange}
+        />
+        <TextField
+          fullWidth
+          id="sinhalaText"
+          name="sinhalaText"
+          label="Sinhala Text"
+          multiline
+          rows={4}
+          variant="outlined"
+          value={formik.values.sinhalaText}
+          readOnly
+        />
+      </form>
+    </Container>
   );
-}
+};
 
 export default Translation;
