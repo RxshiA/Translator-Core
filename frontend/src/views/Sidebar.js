@@ -91,7 +91,7 @@ export default function Sidebar() {
                 <Link
                   className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
                 >
-                  <i className="fas fa-paint-brush mr-2 text-blueGray-400 text-base"></i> Grammar Checker
+                  <i className="fas fa-paint-brush mr-2 text-blueGray-400 text-base"></i> Slang Detector
                 </Link>
               </li>
 
@@ -101,6 +101,15 @@ export default function Sidebar() {
                   to="/game"
                 >
                   <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i> Practice Mode
+                </Link>
+              </li>
+
+              <li className="inline-flex">
+                <Link
+                  className="text-blueGray-700 hover:text-blueGray-500  text-sm block mb-4 no-underline font-semibold"
+                  to="/"
+                >
+                  <i className="fab fa-bookmark mr-2 text-blueGray-400 text-base"></i> Bookmarks
                 </Link>
               </li>
 
