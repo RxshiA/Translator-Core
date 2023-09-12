@@ -28,7 +28,7 @@ function App() {
         <Route path="/game" element={<Game/>}/>
         <Route path="sin" element={<Translation />} />
         <Route path="/definition/:word"  element={<Definition />}/>
-        <Route path="home" element={<Home />} />
+       
 
       </Routes>
 
