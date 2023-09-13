@@ -30,6 +30,34 @@ export default class Home extends Component {
       'si-LK': 'Sinhala',
     };
 
+    const icons = document.querySelectorAll('.icons i');
+
+  // Add the utterance and event listener code here
+  icons.forEach((icon) => {
+    let utterance = new SpeechSynthesisUtterance();
+
+    icon.addEventListener('click', ({ target }) => {
+      if (!this.state.fromText || !this.state.toText) return;
+
+      if (target.classList.contains('fa-copy')) {
+        if (target.id === 'from') {
+          navigator.clipboard.writeText(this.state.fromText);
+        } else {
+          navigator.clipboard.writeText(this.state.toText);
+        }
+      } else {
+        if (target.id === 'from') {
+          utterance.text = this.state.fromText;
+          utterance.lang = this.state.selectedLanguageFrom; // Set the language for the source text
+        } else {
+          utterance.text = this.state.toText;
+          utterance.lang = this.state.selectedLanguageTo; // Set the language for the translated text
+        }
+        speechSynthesis.speak(utterance); // Trigger the speech synthesis
+      }
+    });
+  });
+
     const selectTag = document.querySelectorAll('select');
 
     selectTag.forEach((tag, id) => {
@@ -138,6 +166,9 @@ export default class Home extends Component {
 
 
   };
+
+
+  
 
   render() {
     const {
