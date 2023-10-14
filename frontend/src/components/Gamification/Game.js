@@ -24,10 +24,11 @@ class Game extends Component {
     })
     .then((res)=>res.json())
     .then((data) => {
+      const sortedLeaderboard = data.sort((a, b) => b.points - a.points);
       this.setState({
-        leaderboard: data,
+        leaderboard: sortedLeaderboard,
       });
-      console.log(data);
+      console.log(sortedLeaderboard);
     });
   };
 
