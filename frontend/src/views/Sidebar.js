@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
   return (
@@ -52,7 +51,7 @@ export default function Sidebar() {
                 </div>
               </div>
             </div>
-            
+
             {/* Navigation */}
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               <li className="items-center">
@@ -65,10 +64,9 @@ export default function Sidebar() {
               </li>
 
               <li className="items-center">
-                <Link
-                  className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
-                >
-                  <i className="fas fa-newspaper text-blueGray-400 mr-2 text-sm"></i> History
+                <Link className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block">
+                  <i className="fas fa-newspaper text-blueGray-400 mr-2 text-sm"></i>{" "}
+                  History
                 </Link>
               </li>
 
@@ -77,10 +75,10 @@ export default function Sidebar() {
                   className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
                   to="/profile"
                 >
-                  <i className="fas fa-user-circle text-blueGray-400 mr-2 text-sm"></i> My Profile
+                  <i className="fas fa-user-circle text-blueGray-400 mr-2 text-sm"></i>{" "}
+                  My Profile
                 </Link>
               </li>
-
             </ul>
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
@@ -88,10 +86,9 @@ export default function Sidebar() {
             {/* Navigation */}
             <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
               <li className="inline-flex">
-                <Link
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fas fa-paint-brush mr-2 text-blueGray-400 text-base"></i> Slang Detector
+                <Link className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
+                  <i className="fas fa-paint-brush mr-2 text-blueGray-400 text-base"></i>{" "}
+                  Slang Detector
                 </Link>
               </li>
 
@@ -100,27 +97,27 @@ export default function Sidebar() {
                   className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
                   to="/game"
                 >
-                  <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i> Practice Mode
+                  <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i>{" "}
+                  Practice Mode
                 </Link>
               </li>
 
               <li className="inline-flex">
                 <Link
                   className="text-blueGray-700 hover:text-blueGray-500  text-sm block mb-4 no-underline font-semibold"
-                  to="/"
+                  to="/bookmarks"
                 >
-                  <i className="fab fa-bookmark mr-2 text-blueGray-400 text-base"></i> Bookmarks
+                  <i className="fab fa-bookmark mr-2 text-blueGray-400 text-base"></i>{" "}
+                  Bookmarks
                 </Link>
               </li>
 
               <li className="inline-flex">
-                <Link
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fab fa-css3-alt mr-2 text-blueGray-400 text-base"></i> About Us
+                <Link className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
+                  <i className="fab fa-css3-alt mr-2 text-blueGray-400 text-base"></i>{" "}
+                  About Us
                 </Link>
               </li>
-
             </ul>
           </div>
         </div>
