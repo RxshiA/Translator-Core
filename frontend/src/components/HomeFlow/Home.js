@@ -81,7 +81,7 @@ export default class Home extends Component {
 
   handleInputChange = (event, inputType) => {
     const { selectedLanguageFrom, selectedLanguageTo } = this.state;
-    const inputValue = event.target.value.trim();
+    const inputValue = event.target.value;
 
     this.setState({ [inputType]: inputValue });
 
