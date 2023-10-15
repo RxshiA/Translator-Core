@@ -3,21 +3,25 @@ import { ArrowBack as BackIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useState, useEffect, Fragment } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Bookmarks = () => {
   const [bookmarkList, setBookmarkList] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
-    function fetchBookmarks(word) {
+    function fetchBookmarks() {
       axios
         .get(`http://localhost:4500/bookmark/`)
         .then((res) => {
           setBookmarkList(res.data);
-          console.log(res + "getBookmarkList");
+          console.log(bookmarkList + "getBookmarkList");
         })
         .catch((error) => {
           console.error("Error fetching bookmark:", error.message);
         });
     }
+
+    fetchBookmarks();
   }, []);
   return (
     <>
@@ -30,9 +34,9 @@ const Bookmarks = () => {
       {bookmarkList.length ? (
         bookmarkList.map((b) => (
           <Box
-            key={b}
-            to={`/search/${b}`}
-            component={Link}
+            key={b._id}
+            onClick={() => navigate(`/definition/${b.word}`)}
+            // component={Link}
             sx={{
               p: 2,
               cursor: "pointer",
@@ -46,7 +50,7 @@ const Bookmarks = () => {
               textDecoration: "none",
             }}
           >
-            {b}
+            {b.word}
           </Box>
         ))
       ) : (

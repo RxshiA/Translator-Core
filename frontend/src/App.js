@@ -31,7 +31,6 @@ function App() {
         <Route path="/definition/:word"  element={<Definition />}/>
         <Route path="/bookmarks"  element={<Bookmarks />}/>
 
-
       </Routes>
 
   
